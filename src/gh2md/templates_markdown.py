@@ -1,6 +1,6 @@
 BASE = r"""{issues}"""
 
-ISSUE = r"""'{state}', '{title}', '{labels}', '{date}'"""
+ISSUE = r"""'{state}', '{title}', '{labels}', '{created_at}', '{closed_at}'"""
 
 COMMENT = r""""""
 
