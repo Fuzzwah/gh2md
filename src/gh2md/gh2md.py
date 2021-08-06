@@ -271,21 +271,6 @@ def process_issue_to_markdown(issue):
 
     # Process the comments for this issue
     formatted_comments = ""
-    if issue.comments:
-        comments = []
-        for comment in issue.get_comments():
-            logger.info("Processing comment: {}".format(comment.html_url))
-            this_comment = templates_markdown.COMMENT.format(
-                author=comment.user.name or comment.user.login,
-                author_url=comment.user.html_url,
-                avatar_url=comment.user.avatar_url,
-                date=comment.created_at.strftime("%Y-%m-%d %H:%M"),
-                url=comment.html_url,
-                body=comment.body,
-            )
-            comments.append(this_comment.rstrip())
-
-        formatted_comments += "\n\n".join(comments)
 
     number = str(issue.number)
     if issue.pull_request:
@@ -296,13 +281,16 @@ def process_issue_to_markdown(issue):
         slugtype = "issue"
 
     labels = ""
-    if issue.labels:
-        labels = ", ".join(["`{}`".format(lab.name) for lab in issue.labels])
-        labels = "**Labels**: {}\n\n".format(labels)
+    if 'discord bot' in issue.labels:
+        if 'z_bug' in issue.labels:
+            labels = 'z_bug'
+        elif 'z_enhancement' in issue.labels:
+            labels = 'z_enhancement'
 
     formatted_issue = templates_markdown.ISSUE.format(
         title=issue.title,
-        date=issue.created_at.strftime("%Y-%m-%d %H:%M"),
+        created_at=issue.created_at.strftime("%Y-%m-%d %H:%M"),
+        closed_at=issue.closed_at.strftime("%Y-%m-%d %H:%M"),
         number=number,
         url=issue.html_url,
         author=issue.user.name or issue.user.login,
